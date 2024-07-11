@@ -2,17 +2,28 @@
 
 import cv2
 from ultralytics import YOLO
+import numpy as np
 
 model = YOLO('model.pt')
 print(model.names)
-webcamera = cv2.VideoCapture(0)
+webcamera = cv2.VideoCapture(1)
 # webcamera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
 # webcamera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
 while True:
     success, frame = webcamera.read()
     
-    results = model.track(frame, classes=0, conf=0.8, imgsz=480)
+    results = model.track(frame, classes=2, conf=0.8, imgsz=480)
+
+    print(results[0].boxes.xywhn)
+    boxes = results[0].boxes.xywhn
+
+       
+    for box in boxes:
+        x1, y1, w, h = box.tolist()  # Extract coordinates
+        print(x1, y1, w, h)
+        cv2.putText(frame, f"Coordinates: ({np.round(x1, 3)}, {np.round(y1, 3)})", (50,100), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+    
     cv2.putText(frame, f"Total: {len(results[0].boxes)}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     cv2.imshow("Live Camera", results[0].plot())
 
