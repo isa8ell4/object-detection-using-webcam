@@ -1,6 +1,8 @@
 import numpy as np
 import cv2 as cv
 import glob
+
+# followed this tutortial: https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html
  
 # termination criteria
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
